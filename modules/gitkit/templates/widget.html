@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script
+    type="text/javascript"
+    src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="//www.gstatic.com/authtoolkit/css/gitkit.css">
+  <style>
+    .gitkit-container {
+      margin: 0 10px 0 0;
+    }
+  </style>
+  </head>
+  <body>
+    <div style="padding-left: 10px;">
+      <img src="https://course.citizenmaths.com/main/assets/img/logo.png" alt="Citizen Maths">
+      <br/>
+      <span style="font-weight: bold; font-size: 14pt; font-family: Arial;">Creating and running your account with Citizen Maths</span>
+    </div>
+    <div
+      id="widget"
+      data-branding-url="{{ branding_url }}"
+      data-browser-api-key="{{ browser_api_key }}"
+      data-email-url="{{ email_url }}"
+      data-favicon-url="{{ favicon_url }}"
+      data-signin-url="{{ signin_url }}"
+      data-title="{{ title }}"
+      style="text-align: left;"></div>
+    <script type="text/javascript">
+      (function() {
+        var widget = document.getElementById("widget");
+        var brandingUrl = widget.getAttribute('data-branding-url');
+        var browserApiKey = widget.getAttribute('data-browser-api-key');
+        var emailUrl = widget.getAttribute('data-email-url');
+        var faviconUrl = widget.getAttribute('data-favicon-url');
+        var signinUrl = widget.getAttribute('data-signin-url');
+        var title = widget.getAttribute('data-title');
+
+        var config = {
+          acUiConfig: {
+            branding: brandingUrl,
+            favicon: faviconUrl,
+            title: title
+          },
+          apiKey: browserApiKey,
+          callbacks: {
+            'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
+            'signInSuccess': function(idToken, account, signInSuccessUrl) {
+              var redirect = '/modules/gitkit/signin' + (
+                  signInSuccessUrl ?
+                  '?signInSuccessUrl=' + encodeURIComponent(signInSuccessUrl) :
+                  '');
+              window.location = redirect;
+              return false;
+            }
+          },
+          idps: ["google"],
+          oobActionUrl: emailUrl,
+          signInSuccessUrl: signinUrl,
+          siteName: 'Course Builder'
+        };
+        window.google.identitytoolkit.start(
+          '#widget', config, 'JAVASCRIPT_ESCAPED_POST_BODY');
+      })();
+    </script>
+    <div style="text-align: left; font-size: 11pt; font-family: Arial; padding-left: 10px;">
+      <span style="font-weight: bold; font-size: 14pt;">Guidance</span>
+      <br/>
+      <span style="font-weight: bold; font-size: 12pt;">Already registered for Citizen Maths?</span> <span>You can sign in to Citizen Maths here.</span>
+      <br/><br/>
+      <span style="font-weight: bold; font-size: 12pt;">Starting Citizen Maths for the first time?</span> <span>This is where to create your account with Citizen Maths, before you complete the Citizen Maths registration form.</span>
+      <br/>
+      <ul>
+        <li><span>Enter an email address that you use. If this address is one you use for Google services (such as Gmail) you will then be able to log in via Google. If you use any other email address, you will also need to choose a password for your account with Citizen Maths.</span></li>
+      </ul>
+      <br/>
+      <span style="font-weight: bold; font-size: 12pt;">Need to reset your Citizen Maths password?</span> <span>You can also do this here by clicking “Problem signing in?” when it appears.</span>
+      <br/><br/>
+      <span>In case of difficulty, email <a href="mailto:support@citizenmaths.com">support@citizenmaths.com</a> and we will do our best to assist.</span>
+      <br/>
+      <br/>
+      <div style="width: 100%;"><a href="https://www.citizenmaths.com/" target="_blank">Citizen Maths home page</a> | <a href="https://www.citizenmaths.com/privacy-policy" target="_blank">Privacy policy</a></div>
+    </div>
+  </body>
+</html>
