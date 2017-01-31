@@ -126,7 +126,7 @@ gu = service.get_user(token)
 if gu is not None:
     Runtime.set_current_user(gu)
 
-commented out: #return service.get_user(token)
+#return service.get_user(token)
 return gu
 ```
 
@@ -146,7 +146,7 @@ if 'course.citizenmaths.com/main' in tmp or 'citizenmaths-phase-2.appspot.com/ma
 else:
     dest = self._get_redirect_url_from_dest_url()
 
-commented out: #self.redirect(self._get_redirect_url_from_dest_url())
+#self.redirect(self._get_redirect_url_from_dest_url())
 self.redirect(dest)
 ```
 
