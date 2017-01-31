@@ -316,10 +316,9 @@ class EmailUpdatePolicy(users.EmailUpdatePolicy):
             if gae_student is not None:
                 _LOG.info('gae user:')
                 _LOG.info(gae_student.additional_fields)
-                gitkit_student = cls.copy_gae_user(user_id, new_email, gae_student)#do a student =  models.Student.get_by_user_id again after this method to set this up! change when actually saving to datastore
-                cls.copy_gae_user_completion_info(gae_student, gitkit_student)#gitkit_student will be student when ready
+                gitkit_student = cls.copy_gae_user(user_id, new_email, gae_student)
+                cls.copy_gae_user_completion_info(gae_student, gitkit_student)
                 cls.copy_gae_user_answers(gae_student.user_id, user_id)
-                #student = models.Student.get_by_user_id(user.user_id())
         else:
             _LOG.info('user already registered')
 
@@ -1098,7 +1097,6 @@ class UsersService(users.AbstractUsersService):
 
         rtu = Runtime.get_current_user()
         if rtu is not None:
-            #_LOG.info(rtu)
             return rtu
 
         if not runtime_config:
@@ -1132,7 +1130,8 @@ class UsersService(users.AbstractUsersService):
         if gu is not None:
             Runtime.set_current_user(gu)
 
-        return gu#return service.get_user(token)
+        #return service.get_user(token)
+        return gu
 
     @classmethod
     def get_email_update_policy_class(cls):
