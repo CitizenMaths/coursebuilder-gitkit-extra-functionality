@@ -2,6 +2,7 @@
 Additional functionality added to Gitkit code to allow transfer of progress and personal data from a pre-exisiting user using a Google sign in account to a Gitkit account, as well as storing the user temporarily during the life of a single request to save making multiple lookups to the gitkit service
 
 Note:
+
 1: The code that copies data from one account to another came about because when we decided to implement gitkit from the google sign in only, so a user did not have to use a google associated email address to login,
 we found that the two accounts (google sign in only and gitkit) used very different user id's for their implementation, and thus they would have to register again and all their progress would have been lost.
 The code attempts to find the old account, if there is one, and copy their personal and progress data from the google sign in account to the new gitkit account, so a user would not lose any progress that
@@ -15,6 +16,7 @@ and everytime get_current_user is called, it checks the local thread before maki
 
 
 Important:
+
 You will need to setup coursebuilder to use GITKIT before any of this code is useful.
 You can find instructions on how to setup GITKIT in the Google's own documentation,
 and this guide may also prove useful in setting coursebuilder up to use GITKIT: https://github.com/pabloppp/Course-Builder-gitkit-setup-guide
@@ -22,7 +24,9 @@ Even though the guide says it is for GCB 1.9, the majority is still valid for GC
 
 
 Modifications to the code at modules/gitkit/gitkit.py
+
 Additional static variables:
+
 Line #236 - _CM_NAMESPACE = '<YOUR_COURSE_NAMESPACE_HERE>'
 You need to add your course namespace here so the code accesses the correct datastore
 
@@ -32,6 +36,7 @@ These are for copying and inserting progress data from one account to another
 
 
 Additional methods added:
+
 Line #336 - is_gitkit_user_registered - checks if a gitkit user id is already registered in the course datastore or not
 Line #345 - find_gae_user - attempts to find an old user account with a given email address to see if we know about an account that was registered when the course only used google sign in only
 Line #358 - copy_gae_user - copies the personal data from the Student record from the old account into a newly created gitkit account with a new record in the Student datastore
@@ -43,6 +48,7 @@ Line #861 - set_current_user - sets the current user in the local thread
 
 
 Additional Code to pre-existing methods/classes:
+
 Lines #312-323 in method apply(cls, user) in class EmailUpdatePolicy
 _LOG.info('gitkit user:')
 _LOG.info(student)
