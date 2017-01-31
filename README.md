@@ -28,6 +28,7 @@ Even though the guide says it is for GCB 1.9, the majority is still valid for GC
 ###Additional static variables:
 
 Line #236 - `_CM_NAMESPACE = '<YOUR_COURSE_NAMESPACE_HERE>'`
+
 You need to add your course namespace here so the code accesses the correct datastore
 
 Line #237 - `_COURSE_COMPLETION_PROPERTY_NAME = 'linear-course-completion'`
@@ -57,19 +58,30 @@ Line #861 - `set_current_user` - sets the current user in the local thread
 
 ###Additional Code to pre-existing methods/classes:
 
-Lines #312-323 in method apply(cls, user) in class EmailUpdatePolicy
+Lines #312-323 in method `apply(cls, user)` in class `EmailUpdatePolicy`
 
 `_LOG.info('gitkit user:')
+
 _LOG.info(student)
+
 if cls.is_gitkit_user_registered(user_id) == False:
+
     gae_student = cls.find_gae_user(new_email)
+
     if gae_student is not None:
+
         _LOG.info('gae user:')
+
         _LOG.info(gae_student.additional_fields)
+
         gitkit_student = cls.copy_gae_user(user_id, new_email, gae_student)
+
         cls.copy_gae_user_completion_info(gae_student, gitkit_student)
+
         cls.copy_gae_user_answers(gae_student.user_id, user_id)
+
     else:
+
         _LOG.info('user already registered')`
 
 		
@@ -86,19 +98,19 @@ If it doesn't find any old account with that email, it continues with sign in an
 If it does, then the personal and progress data is copied from the old account to the new gitkit account. It then proceeds with the sign in.
 
 
-Line #841 in class Runtime
+Line #841 in class `Runtime`
 
 `_threadlocal.current_user = None`
 
 Sets up a current_user variable for the local thread and initialised to None
 
 
-Line #817 in method __enter__ in class RequestContext
+Line #817 in method `__enter__` in class `RequestContext`
 
 `Runtime.set_current_user(None)`
 
 
-Line #827 in method __exit__ in class RequestContext
+Line #827 in method `__exit__` in class `RequestContext`
 
 `Runtime.set_current_user(None)`
 
@@ -106,23 +118,28 @@ Line #827 in method __exit__ in class RequestContext
 The two above lines ensure that at the beginning and end of a request that the current_user is set to None to ensure that another user is not carried over from another request.
 
 
-Lines #1098-1100 in method get_current_user in class UsersService
+Lines #1098-1100 in method `get_current_user` in class `UsersService`
 
 `rtu = Runtime.get_current_user()
+
 if rtu is not None:
+
     return rtu`
 
 
 The above code checks if there is a current user stored in the local thread for the request. If there is, it returns the user and the method breaks off here.
 
 
-Lines #1129-1134 in method get_current_user in class UsersService
+Lines #1129-1134 in method `get_current_user` in class `UsersService`
 
 `gu = service.get_user(token)
+
 if gu is not None:
+
     Runtime.set_current_user(gu)
 
 commented out: #return service.get_user(token)
+
 return gu`
 
 
@@ -133,15 +150,20 @@ The returned user from the gitkit service is stored in gu and if it exists, then
 Finally, gu is returned by the method rather than service.get_user(token) as we already called that method and stored it in the aforementioned variable gu.
 
 
-Lines #1349-1356 in method get in class SignInContinueHandler
+Lines #1349-1356 in method `get` in class `SignInContinueHandler`
 
 `tmp = self._get_redirect_url_from_dest_url()
+
 if 'course.citizenmaths.com/main' in tmp or 'citizenmaths-phase-2.appspot.com/main' in tmp:
+
     dest = 'https://course.citizenmaths.com/main/register'
+
 else:
+
     dest = self._get_redirect_url_from_dest_url()
 
 commented out: #self.redirect(self._get_redirect_url_from_dest_url())
+
 self.redirect(dest)`
 
 
